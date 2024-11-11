@@ -6,13 +6,23 @@ Enrutador::Enrutador(string id) :id(id),estadoEncendido(false){
 }
 
 void Enrutador::agregarConexion(const string &destino, int costo)
-{if (!estadoEncendido)
+{for (const auto& conexion : conexiones) {
+        if (conexion.first == destino) {
+            cout << "La conexión con " << destino << " ya existe. No se ha modificado." << endl;
+            return;
+        }
+    }
+    conexiones.insert(make_pair(destino, costo));
+    cout << "Conexión agregada: " << id << " -> " << destino << " con costo " << costo << endl;
+
+    //funcional pero con la clase red no funciona
+    /*if (!estadoEncendido)
 
         {
             cout << "El enrutador " << id << " está apagado. Por favor, encienda el dispositivo para agregar una conexión." << endl;
             return; // Sale de la función si el enrutador está apagado
         }
-    conexiones.push_back(make_pair(destino, costo));
+    conexiones.push_back(make_pair(destino, costo));*/
 }
 
 void Enrutador::eliminarConexion(const string &destino)
@@ -65,4 +75,12 @@ void Enrutador::apagar() {
 
 bool Enrutador::estadoOn() const {
     return estadoEncendido;
+}
+bool Enrutador::existeConexion(const string& destino) const {
+    for (const auto& conexion : conexiones) {
+        if (conexion.first == destino) {
+            return true;
+        }
+    }
+    return false;
 }
